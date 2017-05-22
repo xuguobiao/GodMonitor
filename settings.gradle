@@ -1,0 +1,1 @@
+include ':godmonitor-example', ':godmonitor-annotations', ':godmonitor-runtime',':godmonitor-plugin'

@@ -26,9 +26,9 @@ class GodMonitorPlugin implements Plugin<Project> {
     }
 
     project.dependencies {
-      debugCompile 'com.kido.godmonitor:godmonitor-runtime:0.0.1'
+      compile 'com.kido.godmonitor:godmonitor-runtime:0.0.1'
       // TODO this should come transitively
-      debugCompile 'org.aspectj:aspectjrt:1.8.10'
+      compile 'org.aspectj:aspectjrt:1.8.10'
       compile 'com.kido.godmonitor:godmonitor-annotations:0.0.1'
     }
 

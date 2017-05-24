@@ -13,10 +13,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 public class GodMonitor {
 
   private static final String POINTCUT_METHOD =
-      "execution(@com.kido.godmonitor.weaving.GMonitor * *(..))";
+          "execution(@com.kido.godmonitor.weaving.GMonitor * *(..))"; // 通过GMonitor注解的方法
 
   private static final String POINTCUT_CONSTRUCTOR =
-      "execution(@com.kido.godmonitor.weaving.GMonitor *.new(..))";
+          "execution(@com.kido.godmonitor.weaving.GMonitor *.new(..))"; // 通过GMonitor注解的构造函数
 
   @Pointcut(POINTCUT_METHOD)
   public void methodAnnotatedWithDebugTrace() {}
@@ -24,18 +24,15 @@ public class GodMonitor {
   @Pointcut(POINTCUT_CONSTRUCTOR)
   public void constructorAnnotatedDebugTrace() {}
 
-  @Around("methodAnnotatedWithDebugTrace() || constructorAnnotatedDebugTrace()")
+  @Around("methodAnnotatedWithDebugTrace() || constructorAnnotatedDebugTrace()") // 筛选出所有通过GMonitor注解的方法和构造函数
   public Object weaveJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {
     MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
     String className = methodSignature.getDeclaringType().getSimpleName();
     String methodName = methodSignature.getName();
 
-    final StopWatch stopWatch = new StopWatch();
-    stopWatch.start();
-    Object result = joinPoint.proceed();
-    stopWatch.stop();
-
-    DebugLog.log(className, buildLogMessage(methodName, stopWatch.getTotalTimeMillis()));
+    DebugLog.log(className, buildLogMessage(methodName, " before execution "));
+    Object result = joinPoint.proceed(); // 注解所在的方法/构造函数的执行的地方
+    DebugLog.log(className, buildLogMessage(methodName, " after execution "));
 
     return result;
   }
@@ -44,17 +41,16 @@ public class GodMonitor {
    * Create a log message.
    *
    * @param methodName A string with the method name.
-   * @param methodDuration Duration of the method in milliseconds.
+   * @param info Extra info.
    * @return A string representing message.
    */
-  private static String buildLogMessage(String methodName, long methodDuration) {
+  private static String buildLogMessage(String methodName, String info) {
     StringBuilder message = new StringBuilder();
     message.append("GodMonitor --> ");
     message.append(methodName);
     message.append(" --> ");
     message.append("[");
-    message.append(methodDuration);
-    message.append("ms");
+    message.append(info);
     message.append("]");
 
     return message.toString();

@@ -35,10 +35,10 @@ class GodMonitorPlugin implements Plugin<Project> {
     project.extensions.create('godmonitor', GodMonitorExtension)
 
     variants.all { variant ->
-      if (!variant.buildType.isDebuggable()) {
+      /*if (!variant.buildType.isDebuggable()) {
         log.debug("Skipping non-debuggable build type '${variant.buildType.name}'.")
         return;
-      } else if (!project.godmonitor.enabled) {
+      } else*/ if (!project.godmonitor.enabled) {
         log.debug("GodMonitor is not disabled.")
         return;
       }
